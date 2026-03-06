@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ja"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;Yacht Dice - Web Edition&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { background-color: #1a252f; color: white; text-align: center; font-family: sans-serif; padding-top: 30px; margin: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.die {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: inline-block; width: 70px; height: 70px;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>background-color: white; color: black;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>line-height: 70px; font-size: 55px;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 8px; cursor: pointer; border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 4px solid #333; vertical-align: middle;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>user-select: none; transition: 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.kept { background-color: #f1c40f !important; border-color: #d35400 !important; color: #d35400 !important; transform: translateY(-5px); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button { padding: 12px 24px; font-size: 18px; cursor: pointer; margin: 10px; border-radius: 8px; border: none; font-weight: bold; background-color: #27ae60; color: white; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#reset-btn { background-color: #e74c3c; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button:disabled { background-color: #7f8c8d; opacity: 0.5; cursor: not-allowed; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;YACHT DICE&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="font-size: 22px; margin-bottom: 15px;"&gt;残り: &lt;span id="count"&gt;3&lt;/span&gt;回&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="dice-area"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="d0" class="die"&gt;⚀&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="d1" class="die"&gt;⚀&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="d2" class="die"&gt;⚀&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="d3" class="die"&gt;⚀&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="d4" class="die"&gt;⚀&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="roll-btn"&gt;ダイスを振る&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="location.reload()" id="reset-btn"&gt;次のターンへ&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// ブラウザが読み込まれてから実行</p>
+<p class="p1"><span class="Apple-converted-space">    </span>window.onload = function() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var vals = [1, 1, 1, 1, 1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var keeps = [false, false, false, false, false];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var left = 3;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var marks = ["", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>var rollBtn = document.getElementById("roll-btn");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var countText = document.getElementById("count");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 振るボタンの処理</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rollBtn.onclick = function() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (left &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (var i = 0; i &lt; 5; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (keeps[i] === false) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>vals[i] = Math.floor(Math.random() * 6) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>document.getElementById("d" + i).innerHTML = marks[vals[i]];</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>left--;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>countText.innerHTML = left;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (left === 0) rollBtn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// サイコロクリック（キープ）の処理</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setClick(n) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var el = document.getElementById("d" + n);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>el.onclick = function() {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (left &lt; 3) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>keeps[n] = !keeps[n];</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>this.className = keeps[n] ? "die kept" : "die";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>for (var i = 0; i &lt; 5; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setClick(i);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
